@@ -10,7 +10,7 @@ import Form from './common/Form.component';
 function Youtube() {
 
     const [ searchQuery, setSearchQuery ] = useState('');
-    const [ videos, setVideos ] = useState('');
+    const [ videos, setVideos ] = useState([]);
     const [ videoId, setVideoId ] = useState('');
 
     const formStyle = {
@@ -20,7 +20,7 @@ function Youtube() {
     
     const inputStyle = {
         float: 'left',
-        width: '70%'
+        width: '100%'
     };
 
     const mainList = {
@@ -33,11 +33,9 @@ function Youtube() {
         console.log(searchQuery);
     }, [searchQuery]);
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-    }
+    const video = videos.find(video => video.id.videoId === videoId)
 
-    const handleSubmit = async (e) => {
+    const handleSearch = async (e) => {
         try {
             e.preventDefault();
 
@@ -59,13 +57,15 @@ function Youtube() {
         <div className='container my-3'>
             <header className="navbar navbar-light bg-light justify-content-between">
                 <a href='/youtube' className="navbar-brand">Youtube</a>
-                <Form classN='d-flex' onSubmit={ handleSubmit }> 
+                <Form classN='d-flex' onSubmit={ handleSearch }> 
                     <Input
                         type='text'
                         id="searchQuery"
-                        className = "form-control col-md-6 mx-2"
-                        value={ searchQuery }
-                        event={ handleSearch }
+                        name="searchQuery"
+                        placeholder="Search"
+                        className="form-control col-md-6 mx-2"
+                        event={e => setSearchQuery(e.target.value)}
+                        value={ searchQuery || "" }
                         style={ inputStyle }
                     />
                     <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -75,14 +75,19 @@ function Youtube() {
             <main className='container-fluid my-3'>
 
                 <div className='row'>
-                    <div className="col-md-7">
-                        <VideoPlayer />
+                    <div className="col-md-7 mb-4">
+                        <VideoPlayer
+                            videoId = { videoId }
+                            title = { video?.snippet?.title || '' } // option chaining
+                            description = { video?.snippet?.description || '' } // option chaining
+                        />
                     </div>
                     <div className="col-md-5">
                         <ul style={ mainList }>
-                            {
-                                videos.length > 0 && <VideosList videos={ videos } />  
-                            }             
+                            <VideosList 
+                                handleSelect={ videoId => setVideoId(videoId) } 
+                                videos={ videos } 
+                            /> 
                         </ul>
                     </div>
                 </div>

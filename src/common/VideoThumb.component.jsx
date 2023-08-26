@@ -2,7 +2,7 @@ import React from 'react';
 
 const Videothumb = (props) => {
 
-    const { title, channelTitle, thumbImg, key} = props;
+    const { title, channelTitle, thumbImg, index, videoId, handleSelect } = props;
 
     const media = {
         float: 'left',
@@ -13,6 +13,7 @@ const Videothumb = (props) => {
     const pullLeft = {
         float: 'left',
         width: '160px',
+        cursor: 'pointer',
     }
 
     const mediaBody = {
@@ -29,6 +30,7 @@ const Videothumb = (props) => {
         fontSize: '14px',
         fontWeight: '500',
         textAlign: 'left',
+        cursor: 'pointer',
     }
 
     const byAuthor = {
@@ -39,14 +41,14 @@ const Videothumb = (props) => {
 
     return ( 
 
-        <li style= { media } key={ key }>
-            <a style={ pullLeft } href="#">
-                <img style={ thumbImage } src={ thumbImg } alt={ title } />
-            </a>
-            <div style={ mediaBody }>
-                <h4 style={ videoTitle }>{ title }</h4>
-                <p style={ byAuthor }>By { channelTitle }</p>
-            </div>
+        <li style= { media } key={ index }>
+                <a style={ pullLeft } onClick={ () => handleSelect( videoId ) }>
+                    <img style={ thumbImage } src={ thumbImg } alt={ title } />
+                </a>
+                <div style={ mediaBody }>
+                    <h4 style={ videoTitle } onClick={ () => handleSelect( videoId ) }>{ title }</h4>
+                    <p style={ byAuthor }>By { channelTitle }</p>
+                </div>
         </li>
     );
 }
